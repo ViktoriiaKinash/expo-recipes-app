@@ -1,4 +1,4 @@
-# Welcome to your Recipes app 👋
+# Welcome to my Recipes app 👋
 
 
 ## Get started
