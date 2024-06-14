@@ -1,37 +1,71 @@
-import { Tabs } from 'expo-router';
-import React from 'react';
+import React, { ReactNode } from "react";
 
-import { TabBarIcon } from '@/components/navigation/TabBarIcon';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
+import {
+  MaterialIcons,
+  FontAwesome,
+  AntDesign,
+  MaterialCommunityIcons,
+} from "@expo/vector-icons";
+import { Tabs } from "expo-router";
 
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
+const TabsLayout = (): ReactNode => {
   return (
     <Tabs
+      initialRouteName="home"
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: false,
-      }}>
+        headerShown: true,
+        headerStyle: {
+          backgroundColor: "#A38F85",
+        },
+        headerTitleStyle: {
+          fontWeight: "bold",
+          color: "black",
+        },
+        title: "RECIPESAPP",
+        headerTitleAlign: "center",
+      }}
+    >
       <Tabs.Screen
-        name="index"
+        name="recipes"
         options={{
-          title: 'Home',
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'home' : 'home-outline'} color={color} />
-          ),
+          href: "/recipes",
+          tabBarIcon: GroupMenuIcon,
+          tabBarActiveTintColor: "#61554f",
+          title: "recipes",
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="home"
         options={{
-          title: 'Explore',
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'code-slash' : 'code-slash-outline'} color={color} />
-          ),
+          href: "/home",
+          tabBarIcon: MenuIcon,
+          tabBarActiveTintColor: "#61554f",
+          title: "favorites",
+        }}
+      />
+      <Tabs.Screen
+        name="myprofile"
+        options={{
+          href: "/myprofile",
+          tabBarIcon: HomeIcon,
+          tabBarActiveTintColor: "#61554f",
+          title: "home",
         }}
       />
     </Tabs>
   );
-}
+};
+
+const HomeIcon: React.FC<{ color: string }> = ({ color }) => (
+  <FontAwesome name="user" size={24} color={color} />
+);
+
+const MenuIcon: React.FC<{ color: string }> = ({ color }) => (
+  <AntDesign name="heart" size={24} color={color} />
+);
+
+const GroupMenuIcon: React.FC<{ color: string }> = ({ color }) => (
+  <MaterialCommunityIcons name="chef-hat" size={24} color={color} />
+);
+
+export default TabsLayout;

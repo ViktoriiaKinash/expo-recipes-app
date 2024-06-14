@@ -1,37 +1,49 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
-import 'react-native-reanimated';
+import React, { useEffect } from "react";
 
-import { useColorScheme } from '@/hooks/useColorScheme';
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Stack } from "expo-router";
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
-SplashScreen.preventAutoHideAsync();
+import AuthProvider from "@/context/auth";
+import NavigationReadyProvider from "@/context/navigation/NavigationReadyProvider";
 
-export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
-
-  useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded]);
-
-  if (!loaded) {
-    return null;
-  }
+const Navigation: React.FC = () => {
+  useEffect(() => {}, []);
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-    </ThemeProvider>
+    <Stack
+      screenOptions={{
+        animation: "none",
+        headerStyle: {
+          backgroundColor: "#A38F85",
+        },
+        headerTitleStyle: {
+          fontWeight: "bold",
+        },
+        title: "FavRecipes",
+        headerTitleAlign: "center",
+      }}
+    >
+      <Stack.Screen
+        name="(tabs)"
+        options={{
+          headerShown: false,
+        }}
+      />
+    </Stack>
   );
-}
+};
+
+const App = (): JSX.Element => {
+  const queryClient = new QueryClient();
+  return (
+    <QueryClientProvider client={queryClient}>
+      <NavigationReadyProvider>
+        <AuthProvider>
+          <Navigation />
+        </AuthProvider>
+      </NavigationReadyProvider>
+    </QueryClientProvider>
+  );
+};
+
+export default App;
